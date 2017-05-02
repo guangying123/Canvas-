@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>剪切函数</title>
+    <style>
+        * {
+            margin: 0;
+            padding:0;
+        }
+        #mydiv{
+            width: 600px;
+            height:394px;
+            position: relative;
+            margin: 0 auto;
+        }
+        #myimg
+        {
+            position: absolute;
+            left: 0;
+            top: 0;
+            filter: blur(10px);
+        }
+        #mycanvas{
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        button
+        {
+            border-radius: 10px;
+            background-color: #00d8ff;
+            width: 100px;
+            height: 40px;
+            margin: 2% 45%;
+        }
+    </style>
+</head>
+<body>
+<div id="mydiv">
+    <img src="朱茵.jpg" id="myimg"/>
+    <canvas id="mycanvas">
+    您的浏览器不支持Canvas
+</canvas>
+</div>
+<button onclick="f()">Show</button>
+
+<script>
+
+    var canvas = document.getElementById('mycanvas');
+    var setInt,r = 2;
+    canvas.width=600;
+    canvas.height=394;
+    var context = canvas.getContext('2d');
+    function  posix(t,r) {
+        return 300+r*(16*Math.pow(Math.sin(t),3));
+    }
+    function  posiy(t,r) {
+        return 200-r*(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    }
+    function  drawheart(r) {
+        context.clearRect(0,0,canvas.width,canvas.height);
+        context.beginPath();
+        var rt = 0;
+        context.moveTo(posix(rt,r),posiy(rt,r));
+        context.strokeStyle='red';
+        while(rt < Math.PI*2)
+        {
+            rt+=(Math.PI*2/360);
+            context.lineTo(posix(rt,r),posiy(rt,r));
+            context.stroke();
+        }
+        context.closePath();
+       if(r > 38)
+            clearInterval(setInt);
+    }
+    var image = new Image();
+    image.src = "朱茵.jpg";
+
+function  show() {
+    context.save();
+    drawheart(r)
+    context.clip();
+    context.drawImage(image,0,0);
+    context.restore();
+    r++;
+}
+
+function  f() {
+     setInt = setInterval("show()",100);
+}
+
+</script>
+</body>
+</html>
